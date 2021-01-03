@@ -56,6 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         http
         .authorizeRequests(authorize -> {
             authorize
+                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/", "/webjars/**", "/login", "/resources/**").permitAll()
                 .antMatchers("/beers/find", "/beers*").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/beer/**").permitAll()
@@ -66,8 +67,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
             .and()
         .formLogin().and()
         .httpBasic();
+        
+        // h2 console config
+        http.headers().frameOptions().sameOrigin();
     }
-
+    
+    /*
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception
     {
@@ -90,7 +95,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         // auth.inMemoryAuthentication().withUser("scott").password("tiger").roles("CUSTOMER");
         // auth.inMemoryAuthentication().withUser("scott").password("{ldap}{SSHA}F+n+wGM7xByvmgVLZT8J4e+N7Qy3vj5K20Wbng==").roles("CUSTOMER");
         auth.inMemoryAuthentication().withUser("scott").password("{bcrypt15}$2a$15$Ri8vEsehP.k3bnFL4.w71.JsjFzsc0lhS7nw7RaFBBuTfaGW69m8m").roles("CUSTOMER");
-    }    
+    }
+    */    
     
     /*
     @Override
@@ -157,5 +163,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     public PasswordEncoder passwordEncoder()
     {
         return SFGPasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }  
+    }
 }
